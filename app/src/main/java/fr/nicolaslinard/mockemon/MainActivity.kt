@@ -34,7 +34,7 @@ class MainActivity : ComponentActivity() {
                 Surface(modifier = Modifier.fillMaxSize(), color = MaterialTheme.colorScheme.background) {
                     LaunchedEffect(Unit) {
                         coroutineScope.launch {
-                            mainPresenter.fetchData(coroutineScope) { result ->
+                            mainPresenter.getListMockemon(coroutineScope) { result ->
                                 responseData = result
                             }
                         }
