@@ -1,20 +1,47 @@
 package fr.nicolaslinard.mockemon
 
+import fr.nicolaslinard.mockemon.dto.PokemonData
+import fr.nicolaslinard.mockemon.dto.toMockemon
+import fr.nicolaslinard.mockemon.model.Mockemon
 import io.ktor.client.HttpClient
+import io.ktor.client.call.body
+import io.ktor.client.engine.cio.CIO
+import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
 import io.ktor.client.request.get
+import io.ktor.client.statement.HttpResponse
+import io.ktor.serialization.kotlinx.json.json
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import kotlinx.serialization.json.Json
+
 
 class MainService {
-    private val httpClient = HttpClient()
-    fun fetchData(coroutineScope: CoroutineScope, onResult: (Result<MockemonDTO>) -> Unit) {
+    val client = HttpClient(CIO) {
+        install(ContentNegotiation) {
+            json(Json {
+                prettyPrint = true
+                isLenient = true
+            })
+        }
+    }
+    fun fetchData(coroutineScope: CoroutineScope, onResult: (Result<List<Mockemon>>) -> Unit) {
         coroutineScope.launch(Dispatchers.IO) {
-            val result = httpClient.get<String>("https://65366c57bb226bb85dd21671.mockapi.io/api/v1/list")
+            try {
+                val response: HttpResponse =
+                    client.get(urlString = "https://65366c57bb226bb85dd21671.mockapi.io/api/v1/list")
+                val data: List<PokemonData> = response.body()
 
-            withContext(Dispatchers.Main) {
-                onResult(Result(MockemonDTO(result)))
+                val mockemonList: List<Mockemon> = data.map { it.toMockemon() }
+
+                withContext(Dispatchers.Main) {
+                    onResult(Result(mockemonList))
+                }
+            }  catch (e: Exception) {
+                withContext(Dispatchers.Main) {
+                    onResult(Result(error = e.message))
+                }
             }
         }
     }
