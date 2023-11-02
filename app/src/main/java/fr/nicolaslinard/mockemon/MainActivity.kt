@@ -42,13 +42,12 @@ class MainActivity : ComponentActivity() {
         setContent {
             var responseData by remember { mutableStateOf<List<Mockemon>>(listOf()) }
             val mainPresenter = MainPresenter()
-            val coroutineScope = rememberCoroutineScope()
 
             MockemonTheme {
                 Surface(modifier = Modifier.fillMaxSize(), color = MaterialTheme.colorScheme.background) {
                     LaunchedEffect(Unit) {
-                        coroutineScope.launch {
-                            mainPresenter.getListMockemon(coroutineScope) { result ->
+                        this.launch {
+                            mainPresenter.getListMockemon(this) { result ->
                                 responseData = result
                             }
                         }

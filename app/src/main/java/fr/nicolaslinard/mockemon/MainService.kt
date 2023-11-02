@@ -1,6 +1,6 @@
 package fr.nicolaslinard.mockemon
 
-import fr.nicolaslinard.mockemon.dto.PokemonData
+import fr.nicolaslinard.mockemon.dto.PokemonDTO
 import fr.nicolaslinard.mockemon.dto.toMockemon
 import fr.nicolaslinard.mockemon.model.Mockemon
 import io.ktor.client.HttpClient
@@ -31,7 +31,7 @@ class MainService {
             try {
                 val response: HttpResponse =
                     client.get(urlString = "https://65366c57bb226bb85dd21671.mockapi.io/api/v1/list")
-                val data: List<PokemonData> = response.body()
+                val data: List<PokemonDTO> = response.body()
 
                 val mockemonList: List<Mockemon> = data.map { it.toMockemon() }
 

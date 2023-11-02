@@ -1,6 +1,9 @@
 package fr.nicolaslinard.mockemon.model
 
+import java.time.LocalDateTime
+
 data class Mockemon(
+    val time: LocalDateTime,
     val id: Int,
     val name: LocalizedName,
     val type: List<String>,

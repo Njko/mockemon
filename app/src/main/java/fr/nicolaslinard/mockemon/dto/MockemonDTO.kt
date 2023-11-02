@@ -5,9 +5,10 @@ import fr.nicolaslinard.mockemon.model.Mockemon
 import fr.nicolaslinard.mockemon.model.MockemonBase
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
+import java.time.LocalDateTime
 
 @Serializable
-data class PokemonData(
+data class PokemonDTO(
     val id: Int,
     val name: NameData,
     val type: List<String>,
@@ -39,8 +40,9 @@ data class NameData(
     val french: String
 )
 
-fun PokemonData.toMockemon(): Mockemon {
+fun PokemonDTO.toMockemon(): Mockemon {
     return Mockemon(
+        time = LocalDateTime.now(),
         id = this.id,
         name = LocalizedName(
             english = this.name.english,
