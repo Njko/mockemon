@@ -36,10 +36,12 @@ class MainService {
                 val mockemonList: List<Mockemon> = data.map { it.toMockemon() }
 
                 withContext(Dispatchers.Main) {
+                    print("TEST : SUCCESS ${mockemonList.size}")
                     onResult(Result(mockemonList))
                 }
             }  catch (e: Exception) {
                 withContext(Dispatchers.Main) {
+                    print("TEST : ERROR ${e.message}")
                     onResult(Result(error = e.message))
                 }
             }

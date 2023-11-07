@@ -10,6 +10,7 @@ class MainPresenter {
 
     fun getListMockemon(coroutineScope: CoroutineScope, displayListPokemon: (List<Mockemon>) -> Unit) {
         mainRepository.fetchData(coroutineScope) { result ->
+            print("TEST : result")
             result.success?.let {
                 displayListPokemon(it)
             }

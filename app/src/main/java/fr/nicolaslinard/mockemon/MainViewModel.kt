@@ -13,15 +13,24 @@ class MainViewModel: ViewModel() {
 
     private val mainPresenter = MainPresenter()
 
-    init {
-        fetchData()
-    }
-
     private fun fetchData() {
+        println("TEST : fetchData")
         viewModelScope.launch {
             mainPresenter.getListMockemon(this) { result ->
+                println("TEST : result fin ${result.size}")
                 _pockemons.value = result
             }
         }
     }
+
+    fun handleEvent(uiEvent: MainEvent) {
+        when (uiEvent) {
+            MainEvent.Refresh -> fetchData()
+        }
+    }
+
+    sealed class MainEvent {
+        object Refresh : MainEvent()
+    }
+
 }

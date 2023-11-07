@@ -14,11 +14,12 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.material3.Button
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
@@ -34,16 +35,20 @@ class MainActivity : ComponentActivity() {
         setContent {
             val viewModel = MainViewModel()
 
-
+            val pokemons by viewModel.pockemons.observeAsState(initial = emptyList())
             MockemonTheme {
-                Surface(modifier = Modifier.fillMaxSize(), color = MaterialTheme.colorScheme.background) {
-                    LaunchedEffect(Unit) {
-
-                    }
-                    PokemonList(mockemonList = viewModel.pockemons.value ?: emptyList())
+                Button(
+                    modifier = Modifier
+                        .height(48.dp)
+                        .fillMaxWidth(),
+                    onClick = {  viewModel.handleEvent(MainViewModel.MainEvent.Refresh)}
+                ) {
+                    Text(text = "Refresh")
+                }
+                PokemonList(mockemonList = pokemons)
 
                 }
-            }
+
         }
     }
 
