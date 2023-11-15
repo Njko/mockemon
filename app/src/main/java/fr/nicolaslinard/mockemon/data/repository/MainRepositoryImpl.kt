@@ -1,5 +1,6 @@
-package fr.nicolaslinard.mockemon
+package fr.nicolaslinard.mockemon.data.repository
 
+import fr.nicolaslinard.mockemon.Result
 import fr.nicolaslinard.mockemon.dto.PokemonDTO
 import fr.nicolaslinard.mockemon.dto.toMockemon
 import fr.nicolaslinard.mockemon.model.Mockemon
@@ -17,7 +18,7 @@ import kotlinx.coroutines.withContext
 import kotlinx.serialization.json.Json
 
 
-class MainService {
+class MainRepositoryImpl : MainRepository {
     val client = HttpClient(CIO) {
         install(ContentNegotiation) {
             json(Json {
@@ -26,7 +27,10 @@ class MainService {
             })
         }
     }
-    fun fetchData(coroutineScope: CoroutineScope, onResult: (Result<List<Mockemon>>) -> Unit) {
+    override suspend fun fetchData(
+        coroutineScope: CoroutineScope,
+        onResult: (Result<List<Mockemon>>) -> Unit
+    ) {
         coroutineScope.launch(Dispatchers.IO) {
             try {
                 val response: HttpResponse =
